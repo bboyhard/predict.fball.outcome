@@ -1,6 +1,8 @@
 package fbp;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Iterator;
 
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
@@ -11,39 +13,46 @@ import parser.FBPParser;
 import play.Play;
 
 public class FBPmain {
-
+  private static ArrayList<Play> listOfPlays = new ArrayList<Play>();
+  
   public static void main(String[] args) throws IOException {
-    
-    Play play = new Play();
+    getTheData();
+    sendTheData();
+  }
+  
+  private static void getTheData() throws IOException {
     String url = "http://www.espn.com/college-football/playbyplay?gameId=400869187"; // NEB vs Wyoming
     String urlTen = "http://www.espn.com/college-football/playbyplay?gameId=400876104";
     FBPParser parser = new FBPParser();
     
-    Document doc = Jsoup.connect(urlTen).get();
-    
-      Element test = doc.getElementById("gamepackage-drives-wrap");
+    Document doc = Jsoup.connect(url).get();
     
     Elements playInfo = doc.select("span.post-play");
+    Elements driveInfo = doc.select("h3");
     
-    Elements driveInfo = test.getElementsByTag("h3");
-    
-    int playNumber = 0;
-    for (Element inputElement : playInfo) {   
-        playNumber++;
-        String line = "Nothing";
-        if (inputElement.attr("li") != null) {
-          if (inputElement.getElementsByTag("h3") != null)
-          line = inputElement.text();
-        }
-        
-        String playString = inputElement.text();
-        
-        parser.ParsePlay(playString);
-           
-        System.out.println(line);  
-    }  
-    int testInt = 0;
-    System.out.println("playNumber: " + playNumber);
-  }
+    Iterator<?> driveIt = driveInfo.iterator();   
+    Iterator<?> playIt = playInfo.iterator();
 
+    int playNumber = 0;
+    while (playIt.hasNext() && driveIt.hasNext()) {
+        Play play = new Play();
+        playNumber++;
+        Element driveElement = (Element) driveIt.next();
+        Element playElement = (Element) playIt.next();
+ 
+        String driveString = driveElement.text();
+        String playString = playElement.text();
+        
+        listOfPlays.add(parser.ParsePlay(playString, driveString, playNumber, play));
+           
+//        System.out.println(driveString + " " + playString);
+    }  
+    System.out.println("playNumber: " + playNumber);   
+  }
+  private static void sendTheData() {
+    
+    for (Play play : listOfPlays) {
+      System.out.println(play.playToString());
+    }
+  }
 }
