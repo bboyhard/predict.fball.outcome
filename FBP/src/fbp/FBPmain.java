@@ -25,7 +25,7 @@ public class FBPmain {
     String urlTen = "http://www.espn.com/college-football/playbyplay?gameId=400876104";
     FBPParser parser = new FBPParser();
     
-    Document doc = Jsoup.connect(url).get();
+    Document doc = Jsoup.connect(urlTen).get();
     
     Elements playInfo = doc.select("span.post-play");
     Elements driveInfo = doc.select("h3");
@@ -37,6 +37,7 @@ public class FBPmain {
     while (playIt.hasNext() && driveIt.hasNext()) {
         Play play = new Play();
         playNumber++;
+        play.setPlayNumber(playNumber);
         Element driveElement = (Element) driveIt.next();
         Element playElement = (Element) playIt.next();
  
@@ -44,8 +45,6 @@ public class FBPmain {
         String playString = playElement.text();
         
         listOfPlays.add(parser.ParsePlay(playString, driveString, playNumber, play));
-           
-//        System.out.println(driveString + " " + playString);
     }  
     System.out.println("playNumber: " + playNumber);   
   }
