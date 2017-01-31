@@ -12,13 +12,11 @@ public class FBPParser {
     this.play = play;
     this.playString = playString;
     this.driveString = driveString;
+   
     
     getDownAndDistance();
-    determineKindOfPlay();
+    getPlayFlagsAndTypeOfPlay();
     
-    
-
-
     return play;
   }
 
@@ -43,12 +41,12 @@ public class FBPParser {
     return rval;
   }
   
-  private String determineKindOfPlay() {
+  private String getPlayFlagsAndTypeOfPlay() {
     playString = playString.replace("(", "");
     playString = playString.replace(")", "");
     playString = playString.replace("-", "");
     
-    String [] playArray = playString.split(" ");
+    String[] playArray = playString.split(" ");
     
     play.setClock(playArray[0]);
     play.setQuarter(playArray[2]);
