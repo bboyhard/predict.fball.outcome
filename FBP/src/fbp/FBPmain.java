@@ -22,15 +22,17 @@ public class FBPmain {
   }
   
   private static void getTheData() throws IOException {
-    String url = "http://www.espn.com/college-football/playbyplay?gameId=400869187"; // NEB vs Wyoming
-    String urlTen = "http://www.espn.com/college-football/playbyplay?gameId=400876104";
+    //----ESPN websites----
+//    String url = "http://www.espn.com/college-football/playbyplay?gameId=400869187"; // NEB vs Wyoming
+//    String urlTen = "http://www.espn.com/college-football/playbyplay?gameId=400876104";
+//    Document doc = Jsoup.connect(urlTen).get();
+    
     FBPParser parser = new FBPParser();
 
-    File input = new File("E:\\Dropbox\\GreenAnalytics\\FBP\\predict.fball.outcome\\FBP\\Resouces\\testHtml.html");
+    //----Local Development----
+    File input = new File("E:\\Dropbox\\GreenAnalytics\\FBP\\predict.fball.outcome\\FBP\\Resources\\testHtml.html");
     Document doc = Jsoup.parse(input, "UTF-8", "http://example.com/");
-//    Document doc = Jsoup.connect(urlTen).get();
 
- 
     Elements playInfo = doc.select("span.post-play");
     Elements driveInfo = doc.select("h3");
     
