@@ -25,11 +25,12 @@ public class FBPmain {
     String url = "http://www.espn.com/college-football/playbyplay?gameId=400869187"; // NEB vs Wyoming
     String urlTen = "http://www.espn.com/college-football/playbyplay?gameId=400876104";
     FBPParser parser = new FBPParser();
-    
+
     File input = new File("E:\\Dropbox\\GreenAnalytics\\FBP\\predict.fball.outcome\\FBP\\Resouces\\testHtml.html");
     Document doc = Jsoup.parse(input, "UTF-8", "http://example.com/");
 //    Document doc = Jsoup.connect(urlTen).get();
-    
+
+ 
     Elements playInfo = doc.select("span.post-play");
     Elements driveInfo = doc.select("h3");
     
