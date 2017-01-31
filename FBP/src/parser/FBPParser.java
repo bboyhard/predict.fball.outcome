@@ -4,10 +4,17 @@ import play.Play;
 
 public class FBPParser {
 
+  private Play play = new Play();
+  private String playString;
+  private String driveString;
+  
   public Play ParsePlay(String playString, String driveString, int playNumber, Play play) {
+    this.play = play;
+    this.playString = playString;
+    this.driveString = driveString;
     
-    getDownAndDistance(driveString, play);
-    determineKindOfPlay(playString, play);
+    getDownAndDistance();
+    determineKindOfPlay();
     
     
 
@@ -15,7 +22,7 @@ public class FBPParser {
     return play;
   }
 
-  private boolean getDownAndDistance(String driveString, Play play) {
+  private boolean getDownAndDistance() {
     boolean rval = false;
 
     if (!driveString.isEmpty()) {
@@ -36,7 +43,7 @@ public class FBPParser {
     return rval;
   }
   
-  private String determineKindOfPlay(String playString, Play play) {
+  private String determineKindOfPlay() {
     playString = playString.replace("(", "");
     playString = playString.replace(")", "");
     playString = playString.replace("-", "");
