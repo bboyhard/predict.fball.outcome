@@ -1,7 +1,5 @@
 package play;
 
-import org.apache.poi.sl.draw.geom.IfElseExpression;
-
 public class Play {
   public DownInfo downInfo = new DownInfo();
   public KickOff kickOff = new KickOff();
@@ -59,7 +57,7 @@ public class Play {
     playString = playString + downInfo.down + " and " + downInfo.distance + " on " + downInfo.sideOfField + " " + downInfo.yardLine;
     playString = playString + " - Play Type: " + typeOfPlay;
     if(isTD) {
-      playString = playString + " -Touchdown-";
+      playString = playString + " -Touchdown!!!-";
     }
         
     
