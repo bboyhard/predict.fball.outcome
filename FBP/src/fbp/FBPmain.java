@@ -2,6 +2,8 @@ package fbp;
 
 import java.io.File;
 import java.io.IOException;
+import java.net.InetAddress;
+import java.net.UnknownHostException;
 import java.util.ArrayList;
 import java.util.Iterator;
 
@@ -30,12 +32,9 @@ public class FBPmain {
     FBPParser parser = new FBPParser();
 
     //----Local Development----
-    //----Main PC----
-//    File input = new File("E:\\Dropbox\\GreenAnalytics\\FBP\\predict.fball.outcome\\FBP\\Resources\\testHtml.html");
-    //----Dell PC----
-    File input = new File("C:\\Users\\Dell\\Dropbox\\GreenAnalytics\\FBP\\predict.fball.outcome\\FBP\\Resources\\testHtml.html");
+    File input = new File("//SERVER\\documents\\GreenAnalytics\\predict.fball.outcome\\FBP\\Resources\\testHtml.html");
 
-    Document doc = Jsoup.parse(input, "UTF-8", "http://example.com/");
+    Document doc = Jsoup.parse(input, "UTF-8");
 
     Elements playInfo = doc.select("span.post-play");
     Elements driveInfo = doc.select("h3");

@@ -1,11 +1,33 @@
 package play;
 
+import org.apache.poi.sl.draw.geom.IfElseExpression;
+
 public class Play {
   public DownInfo downInfo = new DownInfo();
+  public KickOff kickOff = new KickOff();
+  public ExtraPoint extraPoint = new ExtraPoint();
   int playNumber;
   String quarter; 
   String clock;
+  String typeOfPlay;
+  boolean isTD;
   
+  public boolean isTD() {
+    return isTD;
+  }
+
+  public void setTD(boolean isTD) {
+    this.isTD = isTD;
+  }
+
+  public String getTypeOfPlay() {
+    return typeOfPlay;
+  }
+
+  public void setTypeOfPlay(String typeOfPlay) {
+    this.typeOfPlay = typeOfPlay;
+  }
+
   public int getPlayNumber() {
     return playNumber;
   }
@@ -34,7 +56,12 @@ public class Play {
     String playString = null;
 
     playString = playNumber + ":" + "(" + clock + "-" + quarter + ") ";
-    playString = playString + downInfo.down + " and " + downInfo.distance + " on " + downInfo.sideOfField + " " + downInfo.yardLine; 
+    playString = playString + downInfo.down + " and " + downInfo.distance + " on " + downInfo.sideOfField + " " + downInfo.yardLine;
+    playString = playString + " - Play Type: " + typeOfPlay;
+    if(isTD) {
+      playString = playString + " -Touchdown-";
+    }
+        
     
     return playString;
   }
