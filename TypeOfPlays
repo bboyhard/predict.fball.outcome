@@ -1,12 +1,15 @@
 
-kickoff kickerName      ydsKicked       rtnName rtnYards        isFumble        isPenalty       isTouchback     isTD
-run     rusherName      ydsRushed       isNoGain        isPenalty       isFumble        isFirstDown     isTD
-pass    passerName      isComplete      recName yardsRec        isFumble        isFirstDown     isPenalty       isIntCep        intCepName      intCepRetYds    isTD
-punt    punterName      ydsPunted       rtnName rtnYards        isFairCatch     isFumble        inPenalty
-Penalty teamAgainst     penaltyPlayer   howManyYds      isNoPlay        isFirstDown
-FG      kickerName      fieldGoalDistance       isGood
+kickoff   kickerName      ydsKicked       rtnName rtnYards        isFumble        isPenalty       isTouchback     isTD
+run       rusherName      ydsRushed       isNoGain        isPenalty       isFumble        isFirstDown     isTD
+pass      passerName      isComplete      recName yardsRec        isFumble        isFirstDown     isPenalty       isIntCep        intCepName      intCepRetYds    isTD
+punt      punterName      ydsPunted       rtnName rtnYards        isFairCatch     isFumble        inPenalty
+Penalty   teamAgainst     penaltyPlayer   howManyYds      isNoPlay        isFirstDown
+FG        kickerName      fieldGoalDistance       isGood
+sacked    qbName          sackerName      sackAssName     ydsLost
+Timeout   teamTaken       clockTime
+End of    endOfQuater
 
-Two-point Conversion    isGood
-KICK    kickerName      isGood
-isFumble        fumblerName     recoverName     forcedName      teamRecoverd    returnYds
-isIntCep        passerName      defenderName    returnYds
+Two-point Conversion      isGood
+KICK      kickerName      isGood
+isFumble  fumblerName     recoverName     forcedName      teamRecoverd    returnYds
+isIntCep  passerName      defenderName    returnYds
