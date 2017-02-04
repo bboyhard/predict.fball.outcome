@@ -12,11 +12,23 @@ public class FBPParser {
     this.play = play;
     this.playString = playString;
     this.driveString = driveString;
-   
-    
+
     getDownAndDistance();
     getPlayFlagsAndTypeOfPlay();
     
+    
+    if (play.getTypeOfPlay() != null)
+    switch (play.getTypeOfPlay()) {
+    case "run":
+        getRunPlayInfo();
+        break;
+    case "pass":
+        getRunPlayInfo();
+        break;
+    default: 
+        break;
+    }
+
     return play;
   }
 
@@ -40,6 +52,11 @@ public class FBPParser {
     }
     return rval;
   }
+  private void getRunPlayInfo() {
+    if (playString.contains("Penalty")) {
+      
+    }
+  }
   
   private void getPlayFlagsAndTypeOfPlay() {
     playString = playString.replace("(", "");
@@ -59,10 +76,16 @@ public class FBPParser {
       play.setTypeOfPlay("pass");
     else if (playString.contains("punt"))
       play.setTypeOfPlay("punt");
-    else if (playString.contains("penalty"))
+    else if (playString.contains("Penalty"))
       play.setTypeOfPlay("penalty");
     else if (playString.contains("FG"))
       play.setTypeOfPlay("fieldGoal");
+    else if (playString.contains("sacked"))
+      play.setTypeOfPlay("sacked");
+    else if (playString.contains("Timeout"))
+      play.setTypeOfPlay("timeOut");
+    else if (playString.contains("End of"))
+      play.setTypeOfPlay("endOfQuater");
    
     play.setTD(false);
     if (playString.contains("TD")) {
@@ -70,6 +93,7 @@ public class FBPParser {
       if (playString.contains("KICK"))
         play.extraPoint.setGood(true);
     }
+    
   }
   
 
