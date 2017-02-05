@@ -9,6 +9,7 @@ public class Play {
   public PuntPlay puntPlay = new PuntPlay();
   public Penalty penalty = new Penalty();
   public FieldGoal fieldGoal = new FieldGoal();
+  public Fumble fumble = new Fumble();
   
   int playNumber;
   String quarter; 
@@ -16,47 +17,71 @@ public class Play {
   String typeOfPlay;
   boolean isTD;
   boolean isPenalty;
-  boolean isFumble;
   boolean isFirstDown;
-  
-  public boolean isPenalty() {
-    return isPenalty;
+  boolean isJunior;
+ 
+  public DownInfo getDownInfo() {
+    return downInfo;
   }
 
-  public void setPenalty(boolean isPenalty) {
-    this.isPenalty = isPenalty;
+  public void setDownInfo(DownInfo downInfo) {
+    this.downInfo = downInfo;
   }
 
-  public boolean isFumble() {
-    return isFumble;
+  public KickOff getKickOff() {
+    return kickOff;
   }
 
-  public void setFumble(boolean isFumble) {
-    this.isFumble = isFumble;
+  public void setKickOff(KickOff kickOff) {
+    this.kickOff = kickOff;
   }
 
-  public boolean isFirstDown() {
-    return isFirstDown;
+  public ExtraPoint getExtraPoint() {
+    return extraPoint;
   }
 
-  public void setFirstDown(boolean isFirstDown) {
-    this.isFirstDown = isFirstDown;
+  public void setExtraPoint(ExtraPoint extraPoint) {
+    this.extraPoint = extraPoint;
   }
 
-  public boolean isTD() {
-    return isTD;
+  public RunPlay getRunPlay() {
+    return runPlay;
   }
 
-  public void setTD(boolean isTD) {
-    this.isTD = isTD;
+  public void setRunPlay(RunPlay runPlay) {
+    this.runPlay = runPlay;
   }
 
-  public String getTypeOfPlay() {
-    return typeOfPlay;
+  public PassPlay getPassPlay() {
+    return passPlay;
   }
 
-  public void setTypeOfPlay(String typeOfPlay) {
-    this.typeOfPlay = typeOfPlay;
+  public void setPassPlay(PassPlay passPlay) {
+    this.passPlay = passPlay;
+  }
+
+  public PuntPlay getPuntPlay() {
+    return puntPlay;
+  }
+
+  public void setPuntPlay(PuntPlay puntPlay) {
+    this.puntPlay = puntPlay;
+  }
+
+  public Penalty getPenalty() {
+    return penalty;
+  }
+
+  public void setPenalty(Penalty penalty) {
+    this.penalty = penalty;
+  }
+
+  public FieldGoal getFieldGoal() {
+    return fieldGoal;
+  }
+
+  public void setFieldGoal(FieldGoal fieldGoal) {
+    this.fieldGoal = fieldGoal;
   }
 
   public int getPlayNumber() {
@@ -66,7 +91,7 @@ public class Play {
   public void setPlayNumber(int playNumber) {
     this.playNumber = playNumber;
   }
-  
+
   public String getQuarter() {
     return quarter;
   }
@@ -83,6 +108,46 @@ public class Play {
     this.clock = clock;
   }
 
+  public String getTypeOfPlay() {
+    return typeOfPlay;
+  }
+
+  public void setTypeOfPlay(String typeOfPlay) {
+    this.typeOfPlay = typeOfPlay;
+  }
+
+  public boolean isTD() {
+    return isTD;
+  }
+
+  public void setTD(boolean isTD) {
+    this.isTD = isTD;
+  }
+
+  public boolean isPenalty() {
+    return isPenalty;
+  }
+
+  public void setPenalty(boolean isPenalty) {
+    this.isPenalty = isPenalty;
+  }
+
+  public boolean isFirstDown() {
+    return isFirstDown;
+  }
+
+  public void setFirstDown(boolean isFirstDown) {
+    this.isFirstDown = isFirstDown;
+  }
+
+  public boolean isJunior() {
+    return isJunior;
+  }
+
+  public void setJunior(boolean isJunior) {
+    this.isJunior = isJunior;
+  }
+
   public String playToString() {
     String playString = null;
 
@@ -93,6 +158,14 @@ public class Play {
       playString = playString + " -Touchdown!!!-";
       if(extraPoint.isGood)
         playString = playString + " ExtraPoint Good";
+    }
+    if(typeOfPlay == "run") {
+      playString = playString + " " + runPlay.rusherFirstName + " " + runPlay.rusherLastName + " ";
+      if (isJunior)
+        playString = playString + "Jr.";
+      
+      playString = playString + " " + "yds: " + runPlay.ydsRushed;
+            
     }
         
     

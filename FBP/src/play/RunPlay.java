@@ -4,7 +4,8 @@ public class RunPlay {
   String rusherFirstName;
   String rusherLastName;
   String ydsRushed;
-  boolean isNoGain;
+  
+
   
   public String getRusherFirstName() {
     return rusherFirstName;
@@ -24,11 +25,4 @@ public class RunPlay {
   public void setYdsRushed(String ydsRushed) {
     this.ydsRushed = ydsRushed;
   }
-  public boolean isNoGain() {
-    return isNoGain;
-  }
-  public void setNoGain(boolean isNoGain) {
-    this.isNoGain = isNoGain;
-  }
-
 }

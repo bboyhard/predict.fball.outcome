@@ -23,7 +23,6 @@ public class FBPParser {
         getRunPlayInfo();
         break;
     case "pass":
-        getRunPlayInfo();
         break;
     default: 
         break;
@@ -52,21 +51,49 @@ public class FBPParser {
     }
     return rval;
   }
-  private void getRunPlayInfo() {
-    if (playString.contains("Penalty")) {
-      
+  
+  private String removeUnwantedWords() {
+    if (playString.contains("Jr")) {
+      play.setJunior(true);
+      playString = playString.replace(" Jr.", "");
     }
+    
+    return playString;
+  }
+  private void getRunPlayInfo() {
+    playString = removeUnwantedWords();
+    String[] playArray = playString.split(" ");
+    if (playString.contains("1ST down"))
+      play.setFirstDown(true);
+    if (playString.contains("Penalty")) {
+      // process penalty
+    } else if (playString.contains("fumble")){ 
+      play.runPlay.setRusherFirstName(playArray[2]);
+      play.runPlay.setRusherLastName(playArray[3]);
+
+      
+    } else {
+        play.runPlay.setRusherFirstName(playArray[2]);
+        play.runPlay.setRusherLastName(playArray[3]);
+        if (playString.contains("no gain"))
+          play.runPlay.setYdsRushed("0");
+        else if (playString.contains("for a loss"))
+          play.runPlay.setYdsRushed("-"+playArray[9]);
+        else
+          play.runPlay.setYdsRushed(playArray[6]);
+    }
+    
   }
   
   private void getPlayFlagsAndTypeOfPlay() {
     playString = playString.replace("(", "");
     playString = playString.replace(")", "");
-    playString = playString.replace("-", "");
+    playString = playString.replace(" -", "");
     
     String[] playArray = playString.split(" ");
     
     play.setClock(playArray[0]);
-    play.setQuarter(playArray[2]);
+    play.setQuarter(playArray[1]);
     
     if (playString.contains("kickoff"))
       play.setTypeOfPlay("kickOff");
