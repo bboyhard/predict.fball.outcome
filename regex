@@ -1,1 +1,7 @@
 String getPlayerName = "(?=\\().+?(?=-).+?(?=\\)).\\s+([^\\s]+\\s[^\\s]+\\s+)";
+
+String find = "fumbled,";
+Pattern pattern = Pattern.compile("\\s+([^\\s]+\\s[^\\s]+\\s+)"+find);
+
+find = "recovered by";
+pattern = Pattern.compile(find+"\\s+([^\\s]+\\s[^\\s]+\\s+[^\\s]+\\s)");
