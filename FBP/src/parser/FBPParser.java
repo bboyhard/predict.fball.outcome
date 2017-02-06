@@ -1,5 +1,8 @@
 package parser;
 
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
 import play.Play;
 
 public class FBPParser {
@@ -56,22 +59,27 @@ public class FBPParser {
     if (playString.contains("Jr")) {
       play.setJunior(true);
       playString = playString.replace(" Jr.", "");
+    } else if (playString.contains("II"))  {
+      playString = playString.replace(" II", "");
     }
+    if (playString.contains(","))
+      playString = playString.replace(",", "");
     
     return playString;
   }
   private void getRunPlayInfo() {
     playString = removeUnwantedWords();
     String[] playArray = playString.split(" ");
+    
+   
+    
     if (playString.contains("1ST down"))
       play.setFirstDown(true);
     if (playString.contains("Penalty")) {
       // process penalty
     } else if (playString.contains("fumble")){ 
-      play.runPlay.setRusherFirstName(playArray[2]);
-      play.runPlay.setRusherLastName(playArray[3]);
+      processAFumble();
 
-      
     } else {
         play.runPlay.setRusherFirstName(playArray[2]);
         play.runPlay.setRusherLastName(playArray[3]);
@@ -81,7 +89,41 @@ public class FBPParser {
           play.runPlay.setYdsRushed("-"+playArray[9]);
         else
           play.runPlay.setYdsRushed(playArray[6]);
-    }
+    }  
+  }
+  
+  private void processAFumble() {
+    String fumbler = "";
+    String recoverer = "";
+    String forcer = "";
+    String returnYds = "";
+    String find = "";
+    
+    find = "fumbled";
+    Pattern pattern = Pattern.compile("\\s+([^\\s]+\\s[^\\s]+\\s+)"+find);
+    Matcher matcher = pattern.matcher(playString);
+    if (matcher.find())
+      fumbler = matcher.group(1);
+    
+    find = "recovered by";
+    pattern = Pattern.compile(find+"\\s+([^\\s]+\\s[^\\s]+\\s+[^\\s]+)");
+    matcher = pattern.matcher(playString);
+    if (matcher.find())
+      recoverer = matcher.group(1);
+    
+    find = "forced by";
+    pattern = Pattern.compile(find+"\\s+([^\\s]+\\s[^\\s]+)");
+    matcher = pattern.matcher(playString);
+    if (matcher.find())
+      forcer = matcher.group(1);
+    
+    find = "return for";
+    pattern = Pattern.compile(find+"\\s+([^\\s]+)");
+    matcher = pattern.matcher(playString);
+    if (matcher.find())
+      returnYds = matcher.group(1);
+    
+
     
   }
   
