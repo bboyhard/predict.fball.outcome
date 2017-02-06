@@ -1,0 +1,6 @@
+Fumbled method
+Find fumbler. Use regex to get first and last name before the word fumbled
+Find forcer, use regex to find play that forced it after words forced by 
+Find recover team, use regex to find team after word recovered by
+Find recover name, use regex to find recover’s name after word recovered by %team
+Find return yards, use regex to find returns yards after  words return for 
