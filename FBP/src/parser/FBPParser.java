@@ -122,9 +122,7 @@ public class FBPParser {
     matcher = pattern.matcher(playString);
     if (matcher.find())
       returnYds = matcher.group(1);
-    
-
-    
+   
   }
   
   private void getPlayFlagsAndTypeOfPlay() {
