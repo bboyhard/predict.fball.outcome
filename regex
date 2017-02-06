@@ -5,3 +5,6 @@ Pattern pattern = Pattern.compile("\\s+([^\\s]+\\s[^\\s]+\\s+)"+find);
 
 find = "recovered by";
 pattern = Pattern.compile(find+"\\s+([^\\s]+\\s[^\\s]+\\s+[^\\s]+\\s)");
+
+find = "forced by";
+pattern = Pattern.compile(find+"\\s+([^\\s]+\\s[^\\s]+\\s+)");
