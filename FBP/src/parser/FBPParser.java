@@ -19,7 +19,6 @@ public class FBPParser {
     getDownAndDistance();
     getPlayFlagsAndTypeOfPlay();
     
-    
     if (play.getTypeOfPlay() != null)
     switch (play.getTypeOfPlay()) {
     case "run":
@@ -67,11 +66,10 @@ public class FBPParser {
     
     return playString;
   }
+  
   private void getRunPlayInfo() {
     playString = removeUnwantedWords();
     String[] playArray = playString.split(" ");
-    
-   
     
     if (playString.contains("1ST down"))
       play.setFirstDown(true);
@@ -79,7 +77,6 @@ public class FBPParser {
       // process penalty
     } else if (playString.contains("fumble")){ 
       processAFumble();
-
     } else {
         play.runPlay.setRusherFirstName(playArray[2]);
         play.runPlay.setRusherLastName(playArray[3]);
@@ -93,36 +90,51 @@ public class FBPParser {
   }
   
   private void processAFumble() {
-    String fumbler = "";
-    String recoverer = "";
-    String forcer = "";
-    String returnYds = "";
+    String fumbler = null;
+    String recoverer = null;
+    String forcer = null;
+    String returnYds = null;
     String find = "";
     
     find = "fumbled";
     Pattern pattern = Pattern.compile("\\s+([^\\s]+\\s[^\\s]+\\s+)"+find);
     Matcher matcher = pattern.matcher(playString);
-    if (matcher.find())
+    if (matcher.find()) {
       fumbler = matcher.group(1);
+      String[] fumblerName = fumbler.split(" ");
+      play.fumble.setFumblerFirstName(fumblerName[0]);
+      play.fumble.setFumblerLastName(fumblerName[1]);
+    }
     
     find = "recovered by";
     pattern = Pattern.compile(find+"\\s+([^\\s]+\\s[^\\s]+\\s+[^\\s]+)");
     matcher = pattern.matcher(playString);
-    if (matcher.find())
+    if (matcher.find()) {
       recoverer = matcher.group(1);
+      String[] recovererName = recoverer.split(" ");
+      play.fumble.setTeamRecovered(recovererName[0]);
+      play.fumble.setRecoverFirstName(recovererName[1]);
+      play.fumble.setRecoverLastName(recovererName[2]);
+    }
     
     find = "forced by";
     pattern = Pattern.compile(find+"\\s+([^\\s]+\\s[^\\s]+)");
     matcher = pattern.matcher(playString);
-    if (matcher.find())
+    if (matcher.find()) {
       forcer = matcher.group(1);
+      String[] forcerName = forcer.split(" ");
+      play.fumble.setForcerFirstName(forcerName[0]);
+      play.fumble.setForcerLastName(forcerName[1]);
+    }
     
     find = "return for";
     pattern = Pattern.compile(find+"\\s+([^\\s]+)");
     matcher = pattern.matcher(playString);
-    if (matcher.find())
+    if (matcher.find()) {
       returnYds = matcher.group(1);
-   
+      play.fumble.setRtnYds(returnYds);
+    }
+  
   }
   
   private void getPlayFlagsAndTypeOfPlay() {

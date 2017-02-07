@@ -5,6 +5,8 @@ public class Fumble {
   String fumblerLastName;
   String recoverFirstName;
   String recoverLastName;
+  String forcerFirstName;
+  String forcerLastName;
   String teamRecovered;
   String rtnYds;
   
@@ -32,6 +34,18 @@ public class Fumble {
   public void setRecoverLastName(String recoverLastName) {
     this.recoverLastName = recoverLastName;
   }
+  public String getForcerFirstName() {
+    return forcerFirstName;
+  }
+  public void setForcerFirstName(String forcerFirstName) {
+    this.forcerFirstName = forcerFirstName;
+  }
+  public String getForcerLastName() {
+    return forcerLastName;
+  }
+  public void setForcerLastName(String forcerLastName) {
+    this.forcerLastName = forcerLastName;
+  }
   public String getTeamRecovered() {
     return teamRecovered;
   }
@@ -44,4 +58,5 @@ public class Fumble {
   public void setRtnYds(String rtnYds) {
     this.rtnYds = rtnYds;
   }
+ 
 }
