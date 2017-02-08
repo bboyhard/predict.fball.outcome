@@ -30,7 +30,7 @@ public class FBPmain {
     FBPParser parser = new FBPParser();
 
     //----Local Development----
-    File input = new File("//SERVER\\documents\\GreenAnalytics\\predict.fball.outcome\\FBP\\Resources\\testHtml.html");
+    File input = new File("//SERVER\\documents\\GreenAnalytics\\predict.fball.outcome\\FBP\\Resources\\fumble.html");
     Document doc = Jsoup.parse(input, "UTF-8");
 
     Elements playInfo = doc.select("span.post-play");
@@ -54,6 +54,7 @@ public class FBPmain {
     }  
     System.out.println("playNumber: " + playNumber);   
   }
+  
   private static void sendTheData() {
     
 //    for (Play play : listOfPlays) {
