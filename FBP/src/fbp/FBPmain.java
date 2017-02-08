@@ -1,10 +1,16 @@
 package fbp;
 
 import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Iterator;
 
+import org.apache.poi.ss.usermodel.Cell;
+import org.apache.poi.ss.usermodel.Row;
+import org.apache.poi.xssf.usermodel.XSSFSheet;
+import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
@@ -12,9 +18,11 @@ import org.jsoup.select.Elements;
 
 import parser.FBPParser;
 import play.Play;
+import poi.POI;
 
 public class FBPmain {
   private static ArrayList<Play> listOfPlays = new ArrayList<Play>();
+  private static String title;
   
   public static void main(String[] args) throws IOException {
     getTheData();
@@ -27,6 +35,8 @@ public class FBPmain {
 //    String urlTen = "http://www.espn.com/college-football/playbyplay?gameId=400876104";
 //    Document doc = Jsoup.connect(urlTen).get();
     
+    
+    
     FBPParser parser = new FBPParser();
 
     //----Local Development----
@@ -35,6 +45,8 @@ public class FBPmain {
 
     Elements playInfo = doc.select("span.post-play");
     Elements driveInfo = doc.select("h3");
+    
+    title = doc.title();
     
     Iterator<?> driveIt = driveInfo.iterator();   
     Iterator<?> playIt = playInfo.iterator();
@@ -55,18 +67,24 @@ public class FBPmain {
     System.out.println("playNumber: " + playNumber);   
   }
   
-  private static void sendTheData() {
+  private static void sendTheData() throws FileNotFoundException, IOException {
     
 //    for (Play play : listOfPlays) {
 //      System.out.println(play.playToString());
 //    }
     
-    for (Play play : listOfPlays) {
-      if (play.getTypeOfPlay() == "run")
-        System.out.println(play.playToString());
-    }
-    
-    
+//    for (Play play : listOfPlays) {
+//      if (play.getTypeOfPlay() == "run")
+//        System.out.println(play.playToString());
+//    }
 
+    POI poi = new POI();
+    
+    if (title.isEmpty())
+      title = "No Title";
+   
+    poi.createFile(title, listOfPlays);
+    
+    
   }
 }
