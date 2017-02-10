@@ -22,27 +22,56 @@ public class POI {
       
       int rowCount = 0;
       
-      Object[][] bookData = {
-          {"Head First Java", "Kathy Serria", 79},
-          {"Effective Java", "Joshua Bloch", 36},
-          {"Clean Code", "Robert martin", 42},
-          {"Thinking in Java", "Bruce Eckel", 35},
-      };
       
-      for (Object[] aBook : bookData) {
+      
+      
+      for (Play play : listOfPlays) {
           Row row = sheet.createRow(++rowCount);
-           
+          
           int columnCount = 0;
-           
-          for (Object field : aBook) {
-              Cell cell = row.createCell(++columnCount);
-              if (field instanceof String) {
-                  cell.setCellValue((String) field);
-              } else if (field instanceof Integer) {
-                  cell.setCellValue((Integer) field);
-              }
-          }
-           
+          
+          Cell cell = row.createCell(++columnCount);
+          
+          cell.setCellValue(play.getPlayNumber());
+          cell = row.createCell(++columnCount);
+          cell.setCellValue(play.getClock());
+          cell = row.createCell(++columnCount);     
+          cell.setCellValue(play.getQuarter());
+          cell = row.createCell(++columnCount);     
+          cell.setCellValue(play.getTypeOfPlay());
+          cell = row.createCell(++columnCount);     
+          cell.setCellValue(play.downInfo.getDistance());
+          cell = row.createCell(++columnCount);     
+          cell.setCellValue(play.downInfo.getDown());
+          cell = row.createCell(++columnCount);     
+          cell.setCellValue(play.downInfo.getSideOfField());
+          cell = row.createCell(++columnCount);     
+          cell.setCellValue(play.downInfo.getYardLine());
+          cell = row.createCell(++columnCount);     
+          cell = row.createCell(++columnCount);     
+          cell.setCellValue(play.runPlay.getRusherFirstName());
+          cell = row.createCell(++columnCount);     
+          cell.setCellValue(play.runPlay.getRusherLastName());
+          cell = row.createCell(++columnCount);     
+          cell.setCellValue(play.runPlay.getYdsRushed());
+          cell = row.createCell(++columnCount);     
+          cell.setCellValue(play.fumble.getForcerFirstName());
+          cell = row.createCell(++columnCount);     
+          cell.setCellValue(play.fumble.getForcerLastName());
+          cell = row.createCell(++columnCount);     
+          cell.setCellValue(play.fumble.getFumblerFirstName());
+          cell = row.createCell(++columnCount);     
+          cell.setCellValue(play.fumble.getFumblerLastName());
+          cell = row.createCell(++columnCount);     
+          cell.setCellValue(play.fumble.getRecoverFirstName());
+          cell = row.createCell(++columnCount);     
+          cell.setCellValue(play.fumble.getRecoverLastName());
+          cell = row.createCell(++columnCount);     
+          cell.setCellValue(play.fumble.getRtnYds());
+          cell = row.createCell(++columnCount);     
+          cell.setCellValue(play.fumble.getTeamRecovered());
+          cell = row.createCell(++columnCount);     
+          
       }
       fileName = fileName+".xlsx";
       
