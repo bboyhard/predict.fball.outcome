@@ -10,16 +10,16 @@ public class Play {
   public Penalty penalty = new Penalty();
   public FieldGoal fieldGoal = new FieldGoal();
   public Fumble fumble = new Fumble();
-  
+
   int playNumber;
-  String quarter; 
+  String quarter;
   String clock;
   String typeOfPlay;
   boolean isTD;
   boolean isPenalty;
   boolean isFirstDown;
   boolean isJunior;
- 
+
   public DownInfo getDownInfo() {
     return downInfo;
   }
@@ -152,23 +152,23 @@ public class Play {
     String playString = null;
 
     playString = playNumber + ":" + "(" + clock + "-" + quarter + ") ";
-    playString = playString + downInfo.down + " and " + downInfo.distance + " on " + downInfo.sideOfField + " " + downInfo.yardLine;
+    playString = playString + downInfo.down + " and " + downInfo.distance + " on " + downInfo.sideOfField + " "
+        + downInfo.yardLine;
     playString = playString + " - Play Type: " + typeOfPlay;
-    if(isTD) {
+    if (isTD) {
       playString = playString + " -Touchdown!!!-";
-      if(extraPoint.isGood)
+      if (extraPoint.isGood)
         playString = playString + " ExtraPoint Good";
     }
-    if(typeOfPlay == "run") {
+    if (typeOfPlay == "run") {
       playString = playString + " " + runPlay.rusherFirstName + " " + runPlay.rusherLastName + " ";
       if (isJunior)
         playString = playString + "Jr.";
-      
+
       playString = playString + " " + "yds: " + runPlay.ydsRushed;
-            
+
     }
-        
-    
+
     return playString;
   }
 }
