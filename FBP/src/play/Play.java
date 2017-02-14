@@ -15,6 +15,13 @@ public class Play {
   String quarter;
   String clock;
   String typeOfPlay;
+  String vistorTeam;
+  String homeTeam;
+  String gameMonth;
+  String gameDay;
+  String gameYear;
+  String vistorTeamScore;
+  String homeTeamScore;
   boolean isTD;
   boolean isPenalty;
   boolean isFirstDown;
@@ -84,6 +91,14 @@ public class Play {
     this.fieldGoal = fieldGoal;
   }
 
+  public Fumble getFumble() {
+    return fumble;
+  }
+
+  public void setFumble(Fumble fumble) {
+    this.fumble = fumble;
+  }
+
   public int getPlayNumber() {
     return playNumber;
   }
@@ -114,6 +129,62 @@ public class Play {
 
   public void setTypeOfPlay(String typeOfPlay) {
     this.typeOfPlay = typeOfPlay;
+  }
+
+  public String getVistorTeam() {
+    return vistorTeam;
+  }
+
+  public void setVistorTeam(String vistorTeam) {
+    this.vistorTeam = vistorTeam;
+  }
+
+  public String getHomeTeam() {
+    return homeTeam;
+  }
+
+  public void setHomeTeam(String homeTeam) {
+    this.homeTeam = homeTeam;
+  }
+
+  public String getGameMonth() {
+    return gameMonth;
+  }
+
+  public void setGameMonth(String gameMonth) {
+    this.gameMonth = gameMonth;
+  }
+
+  public String getGameDay() {
+    return gameDay;
+  }
+
+  public void setGameDay(String gameDay) {
+    this.gameDay = gameDay;
+  }
+
+  public String getGameYear() {
+    return gameYear;
+  }
+
+  public void setGameYear(String gameYear) {
+    this.gameYear = gameYear;
+  }
+
+  public String getVistorTeamScore() {
+    return vistorTeamScore;
+  }
+
+  public void setVistorTeamScore(String vistorTeamScore) {
+    this.vistorTeamScore = vistorTeamScore;
+  }
+
+  public String getHomeTeamScore() {
+    return homeTeamScore;
+  }
+
+  public void setHomeTeamScore(String homeTeamScore) {
+    this.homeTeamScore = homeTeamScore;
   }
 
   public boolean isTD() {

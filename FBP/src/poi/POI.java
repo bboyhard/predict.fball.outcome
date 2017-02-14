@@ -21,10 +21,21 @@ public class POI {
     XSSFSheet sheet = workbook.createSheet(fileName);
 
     int rowCount = 0;
-
+    Cell cell;
     Row row = sheet.createRow(0);
     int columnCount = 0;
-    Cell cell = row.createCell(++columnCount);
+    cell = row.createCell(++columnCount);
+    cell.setCellValue("HomeTeam");
+    cell = row.createCell(++columnCount);
+    cell.setCellValue("VistorTeam");
+    cell = row.createCell(++columnCount);
+    cell.setCellValue("GameDay");
+    cell = row.createCell(++columnCount);
+    cell.setCellValue("GameMonth");
+    cell = row.createCell(++columnCount);
+    cell.setCellValue("GameYear");
+    
+    cell = row.createCell(++columnCount);
     cell.setCellValue("PlayNumber");
     cell = row.createCell(++columnCount);
     cell.setCellValue("Clock");
@@ -62,7 +73,17 @@ public class POI {
       columnCount = 0;
 
       cell = row.createCell(++columnCount);
-
+      cell.setCellValue(play.getHomeTeam());
+      cell = row.createCell(++columnCount);
+      cell.setCellValue(play.getVistorTeam());
+      cell = row.createCell(++columnCount);
+      cell.setCellValue(play.getGameDay());
+      cell = row.createCell(++columnCount);
+      cell.setCellValue(play.getGameMonth());
+      cell = row.createCell(++columnCount);
+      cell.setCellValue(play.getGameYear());
+      
+      cell = row.createCell(++columnCount);
       cell.setCellValue(play.getPlayNumber());
       cell = row.createCell(++columnCount);
       cell.setCellValue(play.getClock());

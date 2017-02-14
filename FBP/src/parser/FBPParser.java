@@ -10,8 +10,9 @@ public class FBPParser {
   private Play play = new Play();
   private String playString;
   private String driveString;
+  private String title;
 
-  public Play ParsePlay(String playString, String driveString, int playNumber, Play play) {
+  public Play ParsePlay(String playString, String driveString, int playNumber, Play play, String title) {
     this.play = play;
     this.playString = playString;
     this.driveString = driveString;
@@ -31,6 +32,17 @@ public class FBPParser {
       }
 
     return play;
+  }
+  
+  private void getTeamsAndScore() {
+    if (!title.isEmpty()) {
+      String[] titleArray = title.split(" ");
+      play.setVistorTeam(titleArray[0]);
+      play.setHomeTeam(titleArray[2]);
+      play.setGameMonth(titleArray[6]);
+      play.setGameDay(titleArray[7]);
+      play.setGameYear(titleArray[8]);
+    }
   }
 
   private boolean getDownAndDistance() {

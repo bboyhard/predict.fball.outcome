@@ -31,17 +31,15 @@ public class FBPmain {
 
   private static void getTheData() throws IOException {
     // ----ESPN websites----
-    // String url =
-    // "http://www.espn.com/college-football/playbyplay?gameId=400869187"; //
+     String url ="http://www.espn.com/college-football/playbyplay?gameId=400869187"; //
     // NEB vs Wyoming
-    // Document doc = Jsoup.connect(url).get();
-    String urlTen = "http://www.espn.com/college-football/playbyplay?gameId=400876104";
-    Document doc = Jsoup.connect(urlTen).get();
+     Document doc = Jsoup.connect(url).get();
+//    String urlTen = "http://www.espn.com/college-football/playbyplay?gameId=400876104";
+//    Document doc = Jsoup.connect(urlTen).get();
 
     FBPParser parser = new FBPParser();
 
     // ----Local Development----
-    // File input = new
     // File("//SERVER\\documents\\GreenAnalytics\\predict.fball.outcome\\FBP\\Resources\\fumble.html");
     // Document doc = Jsoup.parse(input, "UTF-8");
 
@@ -64,7 +62,7 @@ public class FBPmain {
       String driveString = driveElement.text();
       String playString = playElement.text();
 
-      listOfPlays.add(parser.ParsePlay(playString, driveString, playNumber, play));
+      listOfPlays.add(parser.ParsePlay(playString, driveString, playNumber, play, title));
     }
     System.out.println("playNumber: " + playNumber);
   }
