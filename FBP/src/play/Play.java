@@ -1,5 +1,7 @@
 package play;
 
+import java.util.HashMap;
+
 public class Play {
   public DownInfo downInfo = new DownInfo();
   public KickOff kickOff = new KickOff();
@@ -219,27 +221,10 @@ public class Play {
     this.isJunior = isJunior;
   }
 
-  public String playToString() {
-    String playString = null;
-
-    playString = playNumber + ":" + "(" + clock + "-" + quarter + ") ";
-    playString = playString + downInfo.down + " and " + downInfo.distance + " on " + downInfo.sideOfField + " "
-        + downInfo.yardLine;
-    playString = playString + " - Play Type: " + typeOfPlay;
-    if (isTD) {
-      playString = playString + " -Touchdown!!!-";
-      if (extraPoint.isGood)
-        playString = playString + " ExtraPoint Good";
-    }
-    if (typeOfPlay == "run") {
-      playString = playString + " " + runPlay.rusherFirstName + " " + runPlay.rusherLastName + " ";
-      if (isJunior)
-        playString = playString + "Jr.";
-
-      playString = playString + " " + "yds: " + runPlay.ydsRushed;
-
-    }
-
-    return playString;
+  public HashMap<String,String> playToMap() {
+    HashMap<String, String> playMap = new HashMap<String, String>();
+    
+    
+    return playMap;
   }
 }

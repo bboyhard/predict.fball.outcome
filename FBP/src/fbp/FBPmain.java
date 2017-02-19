@@ -25,8 +25,16 @@ public class FBPmain {
   private static String title;
 
   public static void main(String[] args) throws IOException, IllegalArgumentException, IllegalAccessException {
+    long startTime = System.currentTimeMillis();
+    
+    
     getTheData();
     sendTheData();
+    
+    
+    long endTime   = System.currentTimeMillis();
+    long totalTime = endTime - startTime;
+    System.out.println("Run Time: "+totalTime/1000d+"seconds");
   }
 
   private static void getTheData() throws IOException {
@@ -64,7 +72,7 @@ public class FBPmain {
 
       listOfPlays.add(parser.ParsePlay(playString, driveString, playNumber, play, title));
     }
-    System.out.println("playNumber: " + playNumber);
+    
   }
 
   private static void sendTheData()

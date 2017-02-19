@@ -9,6 +9,7 @@ import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.xssf.usermodel.XSSFSheet;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
+import org.apache.velocity.Template;
 
 import play.Play;
 
@@ -19,11 +20,16 @@ public class POI {
 
     XSSFWorkbook workbook = new XSSFWorkbook();
     XSSFSheet sheet = workbook.createSheet(fileName);
+    
+    Template template = new Template();
 
     int rowCount = 0;
     Cell cell;
     Row row = sheet.createRow(0);
     int columnCount = 0;
+    cell = row.createCell(++columnCount);
+    cell.setCellValue("Play#");
+    
     cell = row.createCell(++columnCount);
     cell.setCellValue("HomeTeam");
     cell = row.createCell(++columnCount);
@@ -35,8 +41,6 @@ public class POI {
     cell = row.createCell(++columnCount);
     cell.setCellValue("GameYear");
     
-    cell = row.createCell(++columnCount);
-    cell.setCellValue("PlayNumber");
     cell = row.createCell(++columnCount);
     cell.setCellValue("Clock");
     cell = row.createCell(++columnCount);
@@ -71,20 +75,8 @@ public class POI {
       row = sheet.createRow(++rowCount);
 
       columnCount = 0;
-
-      cell = row.createCell(++columnCount);
-      cell.setCellValue(play.getHomeTeam());
-      cell = row.createCell(++columnCount);
-      cell.setCellValue(play.getVistorTeam());
-      cell = row.createCell(++columnCount);
-      cell.setCellValue(play.getGameDay());
-      cell = row.createCell(++columnCount);
-      cell.setCellValue(play.getGameMonth());
-      cell = row.createCell(++columnCount);
-      cell.setCellValue(play.getGameYear());
+ 
       
-      cell = row.createCell(++columnCount);
-      cell.setCellValue(play.getPlayNumber());
       cell = row.createCell(++columnCount);
       cell.setCellValue(play.getClock());
       cell = row.createCell(++columnCount);

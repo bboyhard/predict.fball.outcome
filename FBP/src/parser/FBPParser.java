@@ -16,7 +16,9 @@ public class FBPParser {
     this.play = play;
     this.playString = playString;
     this.driveString = driveString;
-
+    this.title = title;
+    
+    getTeamsAndScore();
     getDownAndDistance();
     getPlayFlagsAndTypeOfPlay();
 
@@ -35,6 +37,8 @@ public class FBPParser {
   }
   
   private void getTeamsAndScore() {
+    if (title.contains(","))
+      title = title.replace(",", "");
     if (!title.isEmpty()) {
       String[] titleArray = title.split(" ");
       play.setVistorTeam(titleArray[0]);
