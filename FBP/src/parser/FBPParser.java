@@ -17,7 +17,7 @@ public class FBPParser {
     this.playString = playString;
     this.driveString = driveString;
     this.title = title;
-    
+
     getTeamsAndScore();
     getDownAndDistance();
     getPlayFlagsAndTypeOfPlay();
@@ -28,6 +28,7 @@ public class FBPParser {
         getRunPlayInfo();
         break;
       case "pass":
+        getPassPlayInfo();
         break;
       default:
         break;
@@ -35,7 +36,7 @@ public class FBPParser {
 
     return play;
   }
-  
+
   private void getTeamsAndScore() {
     if (title.contains(","))
       title = title.replace(",", "");
@@ -76,6 +77,8 @@ public class FBPParser {
       playString = playString.replace(" Jr.", "");
     } else if (playString.contains("II")) {
       playString = playString.replace(" II", "");
+    } else if (playString.contains("III")) {
+      playString = playString.replace(" III", "");
     }
     if (playString.contains(","))
       playString = playString.replace(",", "");
@@ -105,52 +108,141 @@ public class FBPParser {
     }
   }
 
-  private void processAFumble() {
-    String fumbler = null;
-    String recoverer = null;
-    String forcer = null;
-    String returnYds = null;
+  private void getPassPlayInfo() {
+    playString = removeUnwantedWords();
+    String passer = null;
+    String receiver = null;
     String find = "";
 
-    find = "fumbled";
-    Pattern pattern = Pattern.compile("\\s+([^\\s]+\\s[^\\s]+\\s+)" + find);
+    if (playString.contains("1ST down"))
+      play.setFirstDown(true);
+    if (playString.contains("fumble")) {
+      processAFumble();
+    } else if (playString.contains("intercepted")) {
+      play.passPlay.setIsComplete("false");
+      processAInterception();
+    }
+
+    else if (playString.contains("pass incomplete to")) {
+      play.passPlay.setIsComplete("false");
+      find = "pass incomplete to";
+      Pattern pattern = Pattern.compile("\\s+([^\\s]+\\s[^\\s]+\\s+)" + find);
+      Matcher matcher = pattern.matcher(playString);
+      if (matcher.find()) {
+        passer = matcher.group(1);
+        String[] passerName = passer.split(" ");
+        play.passPlay.setPasserFirstName(passerName[0]);
+        play.passPlay.setPasserLastName(passerName[1]);
+      }
+
+    } else if (playString.contains("pass complete to")) {
+      play.passPlay.setIsComplete("true");
+
+      find = "pass complete to";
+      Pattern pattern = Pattern.compile("\\s+([^\\s]+\\s[^\\s]+\\s+)" + find);
+      Matcher matcher = pattern.matcher(playString);
+      if (matcher.find()) {
+        passer = matcher.group(1);
+        String[] passerName = passer.split(" ");
+        play.passPlay.setPasserFirstName(passerName[0]);
+        play.passPlay.setPasserLastName(passerName[1]);
+      }
+
+      find = "pass complete to";
+      pattern = Pattern.compile(find + "\\s+([^\\s]+\\s[^\\s]+)");
+      matcher = pattern.matcher(playString);
+      if (matcher.find()) {
+        receiver = matcher.group(1);
+        String[] receiverName = receiver.split(" ");
+        play.passPlay.setRecFirstName(receiverName[0]);
+        play.passPlay.setRecLastName(receiverName[1]);
+
+        pattern = Pattern.compile(Pattern.quote("for ") + "(.*?)" + Pattern.quote(" yds"));
+        matcher = pattern.matcher(playString);
+        if (matcher.find()) {
+          play.passPlay.setYards(matcher.group(1));
+        }
+
+        if (playString.contains("no gain"))
+          play.passPlay.setYards("0");
+
+        pattern = Pattern.compile("loss of\\W+(\\w+)");
+        matcher = pattern.matcher(playString);
+        if (matcher.find())
+          play.passPlay.setYards("-" + matcher.group(1));
+      }
+    }
+  }
+
+  private void processAFumble() {
+    String[] dummyArray;
+
+    dummyArray = findAfter("\\s+([^\\s]+\\s[^\\s]+\\s+)", "fumbled");
+    play.fumble.setFumblerFirstName(dummyArray[0]);
+    play.fumble.setFumblerLastName(dummyArray[1]);
+
+    dummyArray = findBefore("\\s+([^\\s]+\\s[^\\s]+\\s+[^\\s]+)", "recovered by");
+    play.fumble.setTeamRecovered(dummyArray[0]);
+    play.fumble.setRecoverFirstName(dummyArray[1]);
+    play.fumble.setRecoverLastName(dummyArray[2]);
+
+    dummyArray = findBefore("\\s+([^\\s]+\\s[^\\s]+)", "forced by");
+    play.fumble.setForcerFirstName(dummyArray[0]);
+    play.fumble.setForcerLastName(dummyArray[1]);
+
+    dummyArray = findBefore("\\s+([^\\s]+)", "return for");
+    play.fumble.setRtnYds(dummyArray[0]);
+
+  }
+
+  private void processAInterception() {
+    
+    String[] dummyArray;
+
+    dummyArray = findAfter("\\s+([^\\s]+\\s[^\\s]+\\s+)", "pass intercepted");
+    play.passPlay.setPasserFirstName(dummyArray[0]);
+    play.passPlay.setPasserLastName(dummyArray[1]);
+    
+    dummyArray = findBefore("\\s+([^\\s]+\\s[^\\s]+\\s+)", "pass intercepted");
+    play.interception.setDefBackFirstName(dummyArray[0]);
+    play.interception.setDefBackLastName(dummyArray[1]);
+    
+    if (playString.contains("TD")) {
+      
+    } else if (playString.contains("no gain")) {
+      
+    } else if (playString.contains("los")) {
+      
+    } else {
+      dummyArray = findBefore("\\s+([^\\s]+)", "return for");
+      play.interception.setRtnYds(dummyArray[0]);
+    }
+    
+
+  }
+
+  private String[] findAfter(String stringPattern, String find) {
+    String[] nameArray = new String[] { "", "" };
+    Pattern pattern = Pattern.compile(stringPattern + find);
     Matcher matcher = pattern.matcher(playString);
     if (matcher.find()) {
-      fumbler = matcher.group(1);
-      String[] fumblerName = fumbler.split(" ");
-      play.fumble.setFumblerFirstName(fumblerName[0]);
-      play.fumble.setFumblerLastName(fumblerName[1]);
+      String passer = matcher.group(1);
+      nameArray = passer.split(" ");
     }
 
-    find = "recovered by";
-    pattern = Pattern.compile(find + "\\s+([^\\s]+\\s[^\\s]+\\s+[^\\s]+)");
-    matcher = pattern.matcher(playString);
+    return nameArray;
+  }
+
+  private String[] findBefore(String stringPattern, String find) {
+    String[] nameArray = new String[] { "", "", "" };
+    Pattern pattern = Pattern.compile(find + stringPattern);
+    Matcher matcher = pattern.matcher(playString);
     if (matcher.find()) {
-      recoverer = matcher.group(1);
-      String[] recovererName = recoverer.split(" ");
-      play.fumble.setTeamRecovered(recovererName[0]);
-      play.fumble.setRecoverFirstName(recovererName[1]);
-      play.fumble.setRecoverLastName(recovererName[2]);
+      String passer = matcher.group(1);
+      nameArray = passer.split(" ");
     }
 
-    find = "forced by";
-    pattern = Pattern.compile(find + "\\s+([^\\s]+\\s[^\\s]+)");
-    matcher = pattern.matcher(playString);
-    if (matcher.find()) {
-      forcer = matcher.group(1);
-      String[] forcerName = forcer.split(" ");
-      play.fumble.setForcerFirstName(forcerName[0]);
-      play.fumble.setForcerLastName(forcerName[1]);
-    }
-
-    find = "return for";
-    pattern = Pattern.compile(find + "\\s+([^\\s]+)");
-    matcher = pattern.matcher(playString);
-    if (matcher.find()) {
-      returnYds = matcher.group(1);
-      play.fumble.setRtnYds(returnYds);
-    }
-
+    return nameArray;
   }
 
   private void getPlayFlagsAndTypeOfPlay() {

@@ -3,9 +3,10 @@ package play;
 public class PassPlay {
   String passerFirstName;
   String passerLastName;
-  boolean isComplete;
+  String isComplete;
   String recFirstName;
   String recLastName;
+  String yards;
   boolean isIntercepted;
   String intcepFistName;
   String intcepLastName;
@@ -27,11 +28,11 @@ public class PassPlay {
     this.passerLastName = passerLastName;
   }
 
-  public boolean isComplete() {
+  public String getIsComplete() {
     return isComplete;
   }
 
-  public void setComplete(boolean isComplete) {
+  public void setIsComplete(String isComplete) {
     this.isComplete = isComplete;
   }
 
@@ -49,6 +50,14 @@ public class PassPlay {
 
   public void setRecLastName(String recLastName) {
     this.recLastName = recLastName;
+  }
+
+  public String getYards() {
+    return yards;
+  }
+
+  public void setYards(String yards) {
+    this.yards = yards;
   }
 
   public boolean isIntercepted() {
@@ -82,4 +91,5 @@ public class PassPlay {
   public void setIntcepYds(String intcepYds) {
     this.intcepYds = intcepYds;
   }
+
 }
