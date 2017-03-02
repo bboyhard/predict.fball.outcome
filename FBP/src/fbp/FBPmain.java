@@ -39,8 +39,9 @@ public class FBPmain {
     // ----ESPN websites----
     String url = "http://www.espn.com/college-football/playbyplay?gameId=400869187"; //
     Document doc = Jsoup.connect(url).get();
-//     String urlTen = "http://www.espn.com/college-football/playbyplay?gameId=400876104";
-//     Document doc = Jsoup.connect(urlTen).get();
+    // String urlTen =
+    // "http://www.espn.com/college-football/playbyplay?gameId=400876104";
+    // Document doc = Jsoup.connect(urlTen).get();
 
     FBPParser parser = new FBPParser();
 
@@ -58,7 +59,7 @@ public class FBPmain {
     String vistorTeamScore = "0";
 
     title = doc.title();
-    
+
     int playNumber = 0;
 
     for (Element element : gameDrives) {
@@ -74,8 +75,7 @@ public class FBPmain {
       String[] homeScoreArray = hscore.split("[^0-9]+");
       String[] vistorScoreArray = vscore.split("[^0-9]+");
 
-      
-      //Espn has the wrong tags for the home and away team for scores.
+      // Espn has the wrong tags for the home and away team for scores.
       if (homeScoreArray.length == 2)
         vistorTeamScore = homeScoreArray[1];
       if (vistorScoreArray.length == 2)
@@ -84,7 +84,6 @@ public class FBPmain {
       Iterator<?> driveIt = driveInfo.iterator();
       Iterator<?> playIt = playInfo.iterator();
 
-      
       while (playIt.hasNext() && driveIt.hasNext()) {
         Play play = new Play();
         playNumber++;
@@ -96,7 +95,8 @@ public class FBPmain {
         String playString = playElement.text();
 
         if (!playString.contains("End of"))
-          listOfPlays.add(parser.ParsePlay(playString, driveString, playNumber, play, title, homeTeamScore, vistorTeamScore));
+          listOfPlays
+              .add(parser.ParsePlay(playString, driveString, playNumber, play, title, homeTeamScore, vistorTeamScore));
       }
     }
 

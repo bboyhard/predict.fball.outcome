@@ -14,7 +14,8 @@ public class FBPParser {
   private String homeTeamScore;
   private String vistorTeamScore;
 
-  public Play ParsePlay(String playString, String driveString, int playNumber, Play play, String title, String homeTeamScore, String vistorTeamScore) {
+  public Play ParsePlay(String playString, String driveString, int playNumber, Play play, String title,
+      String homeTeamScore, String vistorTeamScore) {
     this.play = play;
     this.playString = playString;
     this.driveString = driveString;
@@ -39,8 +40,8 @@ public class FBPParser {
         break;
       case "kickOff":
         getKickOffInfo();
-        break;   
-        
+        break;
+
       default:
         break;
       }
@@ -61,7 +62,7 @@ public class FBPParser {
     }
     play.setVistorTeamScore(vistorTeamScore);
     play.setHomeTeamScore(homeTeamScore);
-    
+
   }
 
   private boolean getDownAndDistance() {
@@ -123,29 +124,29 @@ public class FBPParser {
   }
 
   private void getPenaltyPlayInfo() {
-    
+
   }
-  
-  private void getKickOffInfo () { 
-   
-   String [] dummyArray;
-   
-   dummyArray = findAfter("\\s+([^\\s]+\\s[^\\s]+\\s+)", "kickoff for");
-   play.kickOff.setKickerFirstName(dummyArray[0]);
-   play.kickOff.setKickerLastName(dummyArray[1]);
-   
-   dummyArray = findBefore("\\s+([^\\s]+\\s[^\\s]+\\s+)", "kickoff for");
-   play.kickOff.setYdsKicked(dummyArray[0]);
-   
-   dummyArray = findAfter("\\s+([^\\s]+\\s[^\\s]+\\s+)", "return for");
-   play.kickOff.setRecFirstName(dummyArray[0]);
-   play.kickOff.setRecLastName(dummyArray[1]);
-   
-   dummyArray = findBefore("\\s+([^\\s]+\\s[^\\s]+\\s+)", "return for");
-   play.kickOff.setRtnYds(dummyArray[0]);
-   
+
+  private void getKickOffInfo() {
+
+    String[] dummyArray;
+
+    dummyArray = findAfter("\\s+([^\\s]+\\s[^\\s]+\\s+)", "kickoff for");
+    play.kickOff.setKickerFirstName(dummyArray[0]);
+    play.kickOff.setKickerLastName(dummyArray[1]);
+
+    dummyArray = findBefore("\\s+([^\\s]+\\s[^\\s]+\\s+)", "kickoff for");
+    play.kickOff.setYdsKicked(dummyArray[0]);
+
+    dummyArray = findAfter("\\s+([^\\s]+\\s[^\\s]+\\s+)", "return for");
+    play.kickOff.setRecFirstName(dummyArray[0]);
+    play.kickOff.setRecLastName(dummyArray[1]);
+
+    dummyArray = findBefore("\\s+([^\\s]+\\s[^\\s]+\\s+)", "return for");
+    play.kickOff.setRtnYds(dummyArray[0]);
+
   }
-  
+
   private void getPassPlayInfo() {
     playString = removeUnwantedWords();
     String[] dummyArray;
