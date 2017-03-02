@@ -11,12 +11,16 @@ public class FBPParser {
   private String playString;
   private String driveString;
   private String title;
+  private String homeTeamScore;
+  private String vistorTeamScore;
 
-  public Play ParsePlay(String playString, String driveString, int playNumber, Play play, String title) {
+  public Play ParsePlay(String playString, String driveString, int playNumber, Play play, String title, String homeTeamScore, String vistorTeamScore) {
     this.play = play;
     this.playString = playString;
     this.driveString = driveString;
     this.title = title;
+    this.homeTeamScore = homeTeamScore;
+    this.vistorTeamScore = vistorTeamScore;
 
     getTeamsAndScore();
     getDownAndDistance();
@@ -30,6 +34,13 @@ public class FBPParser {
       case "pass":
         getPassPlayInfo();
         break;
+      case "penalty":
+        getPenaltyPlayInfo();
+        break;
+      case "kickOff":
+        getKickOffInfo();
+        break;   
+        
       default:
         break;
       }
@@ -48,6 +59,9 @@ public class FBPParser {
       play.setGameDay(titleArray[7]);
       play.setGameYear(titleArray[8]);
     }
+    play.setVistorTeamScore(vistorTeamScore);
+    play.setHomeTeamScore(homeTeamScore);
+    
   }
 
   private boolean getDownAndDistance() {
@@ -108,11 +122,35 @@ public class FBPParser {
     }
   }
 
+  private void getPenaltyPlayInfo() {
+    
+  }
+  
+  private void getKickOffInfo () { 
+   
+   String [] dummyArray;
+   
+   dummyArray = findAfter("\\s+([^\\s]+\\s[^\\s]+\\s+)", "kickoff for");
+   play.kickOff.setKickerFirstName(dummyArray[0]);
+   play.kickOff.setKickerLastName(dummyArray[1]);
+   
+   dummyArray = findBefore("\\s+([^\\s]+\\s[^\\s]+\\s+)", "kickoff for");
+   play.kickOff.setYdsKicked(dummyArray[0]);
+   
+   dummyArray = findAfter("\\s+([^\\s]+\\s[^\\s]+\\s+)", "return for");
+   play.kickOff.setRecFirstName(dummyArray[0]);
+   play.kickOff.setRecLastName(dummyArray[1]);
+   
+   dummyArray = findBefore("\\s+([^\\s]+\\s[^\\s]+\\s+)", "return for");
+   play.kickOff.setRtnYds(dummyArray[0]);
+   
+  }
+  
   private void getPassPlayInfo() {
     playString = removeUnwantedWords();
-    String passer = null;
-    String receiver = null;
-    String find = "";
+    String[] dummyArray;
+    Pattern pattern;
+    Matcher matcher;
 
     if (playString.contains("1ST down"))
       play.setFirstDown(true);
@@ -125,52 +163,39 @@ public class FBPParser {
 
     else if (playString.contains("pass incomplete to")) {
       play.passPlay.setIsComplete("false");
-      find = "pass incomplete to";
-      Pattern pattern = Pattern.compile("\\s+([^\\s]+\\s[^\\s]+\\s+)" + find);
-      Matcher matcher = pattern.matcher(playString);
-      if (matcher.find()) {
-        passer = matcher.group(1);
-        String[] passerName = passer.split(" ");
-        play.passPlay.setPasserFirstName(passerName[0]);
-        play.passPlay.setPasserLastName(passerName[1]);
-      }
+
+      dummyArray = findAfter("\\s+([^\\s]+\\s[^\\s]+\\s+)", "pass incomplete to");
+      play.passPlay.setPasserFirstName(dummyArray[0]);
+      play.passPlay.setPasserLastName(dummyArray[1]);
 
     } else if (playString.contains("pass complete to")) {
       play.passPlay.setIsComplete("true");
 
-      find = "pass complete to";
-      Pattern pattern = Pattern.compile("\\s+([^\\s]+\\s[^\\s]+\\s+)" + find);
-      Matcher matcher = pattern.matcher(playString);
-      if (matcher.find()) {
-        passer = matcher.group(1);
-        String[] passerName = passer.split(" ");
-        play.passPlay.setPasserFirstName(passerName[0]);
-        play.passPlay.setPasserLastName(passerName[1]);
-      }
+      dummyArray = findAfter("\\s+([^\\s]+\\s[^\\s]+\\s+)", "pass complete to");
+      play.passPlay.setPasserFirstName(dummyArray[0]);
+      play.passPlay.setPasserLastName(dummyArray[1]);
 
-      find = "pass complete to";
-      pattern = Pattern.compile(find + "\\s+([^\\s]+\\s[^\\s]+)");
+      dummyArray = findBefore("\\s+([^\\s]+\\s[^\\s]+)", "pass complete to");
+      play.passPlay.setRecFirstName(dummyArray[0]);
+      play.passPlay.setRecLastName(dummyArray[1]);
+
+      dummyArray = findBefore("\\s+([^\\s]+\\s[^\\s]+)", "pass complete to");
+      play.passPlay.setRecFirstName(dummyArray[0]);
+      play.passPlay.setRecLastName(dummyArray[1]);
+
+      pattern = Pattern.compile(Pattern.quote("for ") + "(.*?)" + Pattern.quote(" yds"));
       matcher = pattern.matcher(playString);
       if (matcher.find()) {
-        receiver = matcher.group(1);
-        String[] receiverName = receiver.split(" ");
-        play.passPlay.setRecFirstName(receiverName[0]);
-        play.passPlay.setRecLastName(receiverName[1]);
-
-        pattern = Pattern.compile(Pattern.quote("for ") + "(.*?)" + Pattern.quote(" yds"));
-        matcher = pattern.matcher(playString);
-        if (matcher.find()) {
-          play.passPlay.setYards(matcher.group(1));
-        }
-
-        if (playString.contains("no gain"))
-          play.passPlay.setYards("0");
-
-        pattern = Pattern.compile("loss of\\W+(\\w+)");
-        matcher = pattern.matcher(playString);
-        if (matcher.find())
-          play.passPlay.setYards("-" + matcher.group(1));
+        play.passPlay.setYards(matcher.group(1));
       }
+
+      if (playString.contains("no gain"))
+        play.passPlay.setYards("0");
+
+      pattern = Pattern.compile("loss of\\W+(\\w+)");
+      matcher = pattern.matcher(playString);
+      if (matcher.find())
+        play.passPlay.setYards("-" + matcher.group(1));
     }
   }
 
@@ -196,28 +221,41 @@ public class FBPParser {
   }
 
   private void processAInterception() {
-    
+
     String[] dummyArray;
 
     dummyArray = findAfter("\\s+([^\\s]+\\s[^\\s]+\\s+)", "pass intercepted");
     play.passPlay.setPasserFirstName(dummyArray[0]);
     play.passPlay.setPasserLastName(dummyArray[1]);
-    
-    dummyArray = findBefore("\\s+([^\\s]+\\s[^\\s]+\\s+)", "pass intercepted");
-    play.interception.setDefBackFirstName(dummyArray[0]);
-    play.interception.setDefBackLastName(dummyArray[1]);
-    
+
     if (playString.contains("TD")) {
-      
+      dummyArray = findBefore("\\s+([^\\s]+\\s[^\\s]+)", "for a TD");
+      play.interception.setDefBackFirstName(dummyArray[0]);
+      play.interception.setDefBackLastName(dummyArray[1]);
+
+      dummyArray = findBefore("\\s+([^\\s]+)", "return for");
+      play.interception.setRtnYds(dummyArray[0]);
+
     } else if (playString.contains("no gain")) {
-      
-    } else if (playString.contains("los")) {
-      
+      dummyArray = findBefore("\\s+([^\\s]+\\s[^\\s]+\\s+)", "pass intercepted");
+      play.interception.setDefBackFirstName(dummyArray[0]);
+      play.interception.setDefBackLastName(dummyArray[1]);
+
+      play.interception.setRtnYds("0");
+    } else if (playString.contains("loss")) {
+
+      dummyArray = findBefore("\\s+([^\\s]+\\s[^\\s]+\\s+)", "pass intercepted");
+      play.interception.setDefBackFirstName(dummyArray[0]);
+      play.interception.setDefBackLastName(dummyArray[1]);
+
     } else {
+      dummyArray = findBefore("\\s+([^\\s]+\\s[^\\s]+\\s+)", "pass intercepted");
+      play.interception.setDefBackFirstName(dummyArray[0]);
+      play.interception.setDefBackLastName(dummyArray[1]);
+
       dummyArray = findBefore("\\s+([^\\s]+)", "return for");
       play.interception.setRtnYds(dummyArray[0]);
     }
-    
 
   }
 
@@ -271,14 +309,12 @@ public class FBPParser {
       play.setTypeOfPlay("sacked");
     else if (playString.contains("Timeout"))
       play.setTypeOfPlay("timeOut");
-    else if (playString.contains("End of"))
-      play.setTypeOfPlay("endOfQuater");
 
     play.setTD(false);
     if (playString.contains("TD")) {
       play.setTD(true);
       if (playString.contains("KICK"))
-        play.extraPoint.setGood(true);
+        play.setExtraPoint(true);
     }
 
   }

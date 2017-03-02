@@ -1,21 +1,31 @@
 package play;
 
 public class KickOff {
-  String kickerName;
+  String kickerFirstName;
+  String kickerLastName;
   String ydsKicked;
-  String rtnName;
   String rtnYds;
+  String recFirstName;
+  String recLastName;
   boolean isFumble;
   boolean isTD;
   boolean isTouchback;
   boolean isPenalty;
 
-  public String getKickerName() {
-    return kickerName;
+  public String getKickerFirstName() {
+    return kickerFirstName;
   }
 
-  public void setKickerName(String kickerName) {
-    this.kickerName = kickerName;
+  public void setKickerFirstName(String kickerFirstName) {
+    this.kickerFirstName = kickerFirstName;
+  }
+
+  public String getKickerLastName() {
+    return kickerLastName;
+  }
+
+  public void setKickerLastName(String kickerLastName) {
+    this.kickerLastName = kickerLastName;
   }
 
   public String getYdsKicked() {
@@ -26,20 +36,28 @@ public class KickOff {
     this.ydsKicked = ydsKicked;
   }
 
-  public String getRtnName() {
-    return rtnName;
-  }
-
-  public void setRtnName(String rtnName) {
-    this.rtnName = rtnName;
-  }
-
   public String getRtnYds() {
     return rtnYds;
   }
 
   public void setRtnYds(String rtnYds) {
     this.rtnYds = rtnYds;
+  }
+
+  public String getRecFirstName() {
+    return recFirstName;
+  }
+
+  public void setRecFirstName(String recFirstName) {
+    this.recFirstName = recFirstName;
+  }
+
+  public String getRecLastName() {
+    return recLastName;
+  }
+
+  public void setRecLastName(String recLastName) {
+    this.recLastName = recLastName;
   }
 
   public boolean isFumble() {
@@ -73,4 +91,5 @@ public class KickOff {
   public void setPenalty(boolean isPenalty) {
     this.isPenalty = isPenalty;
   }
+
 }

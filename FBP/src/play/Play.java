@@ -6,7 +6,6 @@ import java.util.LinkedList;
 public class Play {
   public DownInfo downInfo = new DownInfo();
   public KickOff kickOff = new KickOff();
-  public ExtraPoint extraPoint = new ExtraPoint();
   public RunPlay runPlay = new RunPlay();
   public PassPlay passPlay = new PassPlay();
   public PuntPlay puntPlay = new PuntPlay();
@@ -27,6 +26,8 @@ public class Play {
   String vistorTeamScore;
   String homeTeamScore;
   boolean isTD;
+  boolean extraPoint;
+  boolean twoPointConversion;
   boolean isPenalty;
   boolean isFirstDown;
   boolean isJunior;
@@ -45,14 +46,6 @@ public class Play {
 
   public void setKickOff(KickOff kickOff) {
     this.kickOff = kickOff;
-  }
-
-  public ExtraPoint getExtraPoint() {
-    return extraPoint;
-  }
-
-  public void setExtraPoint(ExtraPoint extraPoint) {
-    this.extraPoint = extraPoint;
   }
 
   public RunPlay getRunPlay() {
@@ -101,6 +94,14 @@ public class Play {
 
   public void setFumble(Fumble fumble) {
     this.fumble = fumble;
+  }
+
+  public Interception getInterception() {
+    return interception;
+  }
+
+  public void setInterception(Interception interception) {
+    this.interception = interception;
   }
 
   public int getPlayNumber() {
@@ -199,6 +200,22 @@ public class Play {
     this.isTD = isTD;
   }
 
+  public boolean isExtraPoint() {
+    return extraPoint;
+  }
+
+  public void setExtraPoint(boolean extraPoint) {
+    this.extraPoint = extraPoint;
+  }
+
+  public boolean isTwoPointConversion() {
+    return twoPointConversion;
+  }
+
+  public void setTwoPointConversion(boolean twoPointConversion) {
+    this.twoPointConversion = twoPointConversion;
+  }
+
   public boolean isPenalty() {
     return isPenalty;
   }
@@ -229,7 +246,9 @@ public class Play {
     gameInfoHeader.add("Game Day");
     gameInfoHeader.add("Game Year");
     gameInfoHeader.add("Home Team");
+    gameInfoHeader.add("Home Team Score");
     gameInfoHeader.add("Vistor Team");
+    gameInfoHeader.add("Vistor Team Score");
 
     return gameInfoHeader;
   }
@@ -240,7 +259,9 @@ public class Play {
     gameInfoMap.put("gameDay", gameDay);
     gameInfoMap.put("gameYear", gameYear);
     gameInfoMap.put("homeTeam", homeTeam);
+    gameInfoMap.put("homeTeamScore", homeTeamScore);
     gameInfoMap.put("vistorTeam", vistorTeam);
+    gameInfoMap.put("vistorTeamScore", vistorTeamScore);
 
     return gameInfoMap;
   }
@@ -316,13 +337,13 @@ public class Play {
 
     return gameInfoMap;
   }
-  
+
   public LinkedList<String> intInfoHeader() {
     LinkedList<String> gameInfoHeader = new LinkedList<String>();
     gameInfoHeader.add("Def Back First Name");
     gameInfoHeader.add("Def Back Last Name");
     gameInfoHeader.add("Int Return Yards");
-    
+
     return gameInfoHeader;
   }
 
@@ -335,6 +356,29 @@ public class Play {
     return gameInfoMap;
   }
 
+  public LinkedList<String> kickOffInfoHeader() {
+    LinkedList<String> gameInfoHeader = new LinkedList<String>();
+    gameInfoHeader.add("Kickoff Kicker First Name");
+    gameInfoHeader.add("Kickoff Kicker Last Name");
+    gameInfoHeader.add("Yards Kicked");
+    gameInfoHeader.add("Receiver First Name");
+    gameInfoHeader.add("Receiver Last Name");
+    gameInfoHeader.add("Return Yards");
+    return gameInfoHeader;
+  }
+
+  public LinkedHashMap<String, String> kickOffInfoToMap() {
+    LinkedHashMap<String, String> gameInfoMap = new LinkedHashMap<String, String>();
+    gameInfoMap.put("KickOffKickFirstName", kickOff.kickerFirstName);
+    gameInfoMap.put("KickOffKickLastName", kickOff.kickerLastName);
+    gameInfoMap.put("kickOffYardsKicked", kickOff.ydsKicked);
+    gameInfoMap.put("kickOffRecFirstName", kickOff.recFirstName);
+    gameInfoMap.put("kickOffRecLastName", kickOff.recLastName);
+    gameInfoMap.put("kickOffRtnYards", kickOff.rtnYds);
+
+    return gameInfoMap;
+  }
+
   public LinkedList<String> passInfoHeader() {
     LinkedList<String> gameInfoHeader = new LinkedList<String>();
     gameInfoHeader.add("Passer First Name");
@@ -343,6 +387,7 @@ public class Play {
     gameInfoHeader.add("Receiver First Name");
     gameInfoHeader.add("Receiver Last Name");
     gameInfoHeader.add("Passing Yards");
+
     return gameInfoHeader;
   }
 

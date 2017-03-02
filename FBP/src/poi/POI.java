@@ -57,6 +57,11 @@ public class POI {
       cell = row.createCell(++columnCount);
       cell.setCellValue(field);
     }
+    
+    for (String field : dummyPlay.kickOffInfoHeader()) {
+      cell = row.createCell(++columnCount);
+      cell.setCellValue(field);
+    }
 
     rowCount = 0;
     for (Play play : listOfPlays) {
@@ -68,6 +73,7 @@ public class POI {
       playMap.putAll(play.fumbleInfoToMap());
       playMap.putAll(play.passInfoToMap());
       playMap.putAll(play.intInfoToMap());
+      playMap.putAll(play.kickOffInfoToMap());
 
       columnCount = 0;
 

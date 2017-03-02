@@ -26,53 +26,80 @@ public class FBPmain {
 
   public static void main(String[] args) throws IOException, IllegalArgumentException, IllegalAccessException {
     long startTime = System.currentTimeMillis();
-    
-    
+
     getTheData();
     sendTheData();
-    
-    
-    long endTime   = System.currentTimeMillis();
+
+    long endTime = System.currentTimeMillis();
     long totalTime = endTime - startTime;
-    System.out.println("Run Time: "+totalTime/1000d+"seconds");
+    System.out.println("Run Time: " + totalTime / 1000d + "seconds");
   }
 
   private static void getTheData() throws IOException {
     // ----ESPN websites----
-//     String url ="http://www.espn.com/college-football/playbyplay?gameId=400869187"; //
-    // NEB vs Wyoming
-//     Document doc = Jsoup.connect(url).get();
-//    String urlTen = "http://www.espn.com/college-football/playbyplay?gameId=400876104";
-//    Document doc = Jsoup.connect(urlTen).get();
+    String url = "http://www.espn.com/college-football/playbyplay?gameId=400869187"; //
+    Document doc = Jsoup.connect(url).get();
+//     String urlTen = "http://www.espn.com/college-football/playbyplay?gameId=400876104";
+//     Document doc = Jsoup.connect(urlTen).get();
 
     FBPParser parser = new FBPParser();
 
     // ----Local Development----
-     File input = new File("//SERVER\\documents\\GreenAnalytics\\predict.fball.outcome\\FBP\\Resources\\fumble.html");
-     Document doc = Jsoup.parse(input, "UTF-8");
+    // File input = new
+    // File("//SERVER\\documents\\GreenAnalytics\\predict.fball.outcome\\FBP\\Resources\\fumble.html");
+    // Document doc = Jsoup.parse(input, "UTF-8");
 
     Elements playInfo = doc.select("span.post-play");
     Elements driveInfo = doc.select("h3");
 
+    Elements gameDrives = doc.select("li.accordion-item");
+
+    String homeTeamScore = "0";
+    String vistorTeamScore = "0";
+
     title = doc.title();
-
-    Iterator<?> driveIt = driveInfo.iterator();
-    Iterator<?> playIt = playInfo.iterator();
-
-    int playNumber = 0;
-    while (playIt.hasNext() && driveIt.hasNext()) {
-      Play play = new Play();
-      playNumber++;
-      play.setPlayNumber(playNumber);
-      Element driveElement = (Element) driveIt.next();
-      Element playElement = (Element) playIt.next();
-
-      String driveString = driveElement.text();
-      String playString = playElement.text();
-
-      listOfPlays.add(parser.ParsePlay(playString, driveString, playNumber, play, title));
-    }
     
+    int playNumber = 0;
+
+    for (Element element : gameDrives) {
+      playInfo = element.select("span.post-play");
+      driveInfo = element.select("h3");
+
+      Elements homeScore = element.select("span.home");
+      Elements vistorScore = element.select("span.away");
+
+      String hscore = homeScore.text();
+      String vscore = vistorScore.text();
+
+      String[] homeScoreArray = hscore.split("[^0-9]+");
+      String[] vistorScoreArray = vscore.split("[^0-9]+");
+
+      
+      //Espn has the wrong tags for the home and away team for scores.
+      if (homeScoreArray.length == 2)
+        vistorTeamScore = homeScoreArray[1];
+      if (vistorScoreArray.length == 2)
+        homeTeamScore = vistorScoreArray[1];
+
+      Iterator<?> driveIt = driveInfo.iterator();
+      Iterator<?> playIt = playInfo.iterator();
+
+      
+      while (playIt.hasNext() && driveIt.hasNext()) {
+        Play play = new Play();
+        playNumber++;
+        play.setPlayNumber(playNumber);
+        Element driveElement = (Element) driveIt.next();
+        Element playElement = (Element) playIt.next();
+
+        String driveString = driveElement.text();
+        String playString = playElement.text();
+
+        if (!playString.contains("End of"))
+          listOfPlays.add(parser.ParsePlay(playString, driveString, playNumber, play, title, homeTeamScore, vistorTeamScore));
+      }
+    }
+
   }
 
   private static void sendTheData()
