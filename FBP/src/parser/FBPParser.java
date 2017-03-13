@@ -41,7 +41,15 @@ public class FBPParser {
       case "kickOff":
         getKickOffInfo();
         break;
-
+      case "punt":
+        getPuntInfo();
+        break;
+      case "fieldGoal":
+        getFieldGoalInfo();
+        break;
+      case "timeOut":
+        getTimeOutInfo();
+        break;
       default:
         break;
       }
@@ -65,25 +73,18 @@ public class FBPParser {
 
   }
 
-  private boolean getDownAndDistance() {
-    boolean rval = false;
-
+  private void getDownAndDistance() {
     if (!driveString.isEmpty()) {
       String[] driveArray = driveString.split(" ");
       play.downInfo.setDown(driveArray[0]);
       play.downInfo.setDistance(driveArray[2]);
-
       int test = driveArray.length;
-
       if (test == 5) {
-
       } else {
         play.downInfo.setSideOfField(driveArray[4]);
         play.downInfo.setYardLine(driveArray[5]);
       }
-
     }
-    return rval;
   }
 
   private String removeUnwantedWords() {
@@ -105,31 +106,100 @@ public class FBPParser {
     playString = removeUnwantedWords();
     String[] playArray = playString.split(" ");
 
+    String[] dummyArray;
+
     if (playString.contains("1ST down"))
       play.setFirstDown(true);
-    if (playString.contains("Penalty")) {
-      // process penalty
-    } else if (playString.contains("fumble")) {
+    if (playString.contains("sacked")) {
+      dummyArray = findBefore("\\s+([^\\s]+\\s[^\\s]+\\s+)", "sacked by");
+      play.setSackerFirstName(dummyArray[0]);
+      play.setSackerLastName(dummyArray[1]);
+    }
+    if (playString.contains("fumble")) {
       processAFumble();
     } else {
-      play.runPlay.setRusherFirstName(playArray[2]);
-      play.runPlay.setRusherLastName(playArray[3]);
+      dummyArray = findAfter("\\s+([^\\s]+\\s[^\\s]+\\s+)", "run for");
+      play.runPlay.setRusherFirstName(dummyArray[0]);
+      play.runPlay.setRusherLastName(dummyArray[1]);
+
       if (playString.contains("no gain"))
         play.runPlay.setYdsRushed("0");
-      else if (playString.contains("for a loss"))
-        play.runPlay.setYdsRushed("-" + playArray[9]);
-      else
-        play.runPlay.setYdsRushed(playArray[6]);
+
+      Pattern pattern = Pattern.compile("loss of\\W+(\\w+)");
+      Matcher matcher = pattern.matcher(playString);
+      if (matcher.find())
+        play.runPlay.setYdsRushed("-" + matcher.group(1));
+
+      else {
+        pattern = Pattern.compile(Pattern.quote("for ") + "(.*?)" + Pattern.quote(" yds"));
+        matcher = pattern.matcher(playString);
+        if (matcher.find()) {
+          play.runPlay.setYdsRushed(matcher.group(1));
+        }
+      }
     }
   }
 
   private void getPenaltyPlayInfo() {
+    playString = removeUnwantedWords();
+
+    String[] dummyArray;
+    
+    if (playString.contains("fumble"))
+      processAFumble();
+  }
+
+  private void getTimeOutInfo() {
+    //dont care timeouts dont effect the game.
+  }
+
+  private void getPuntInfo() {
+    playString = removeUnwantedWords();
+
+    String[] dummyArray;
+    
+    if (playString.contains("fumble"))
+      processAFumble();
+    
+    dummyArray = findAfter("\\s+([^\\s]+\\s[^\\s]+\\s+)", "punt for");
+    play.puntPlay.setPunterFirstName(dummyArray[0]);
+    play.puntPlay.setPunterLastName(dummyArray[1]);
+
+    dummyArray = findBefore("\\s+([^\\s]+\\s[^\\s]+\\s+)", "punt for");
+    play.puntPlay.setYdsPunted(dummyArray[0]);
+
+    dummyArray = findAfter("\\s+([^\\s]+\\s[^\\s]+\\s+)", "returns for");
+    play.puntPlay.setRtnFirstName(dummyArray[0]);
+    play.puntPlay.setRtnLastName(dummyArray[1]);
+
+    dummyArray = findBefore("\\s+([^\\s]+\\s[^\\s]+\\s+)", "returns for");
+    play.puntPlay.setRtnYds(dummyArray[0]);
 
   }
 
-  private void getKickOffInfo() {
+  private void getFieldGoalInfo() {
+    playString = removeUnwantedWords();
 
     String[] dummyArray;
+    
+    if (playString.contains("fumble"))
+      processAFumble();
+    
+    dummyArray = findBefore("\\s+([^\\s]+\\s[^\\s]+\\s+[^\\s]+)", " yd FG");
+    play.puntPlay.setPunterFirstName(dummyArray[0]);
+    play.puntPlay.setPunterLastName(dummyArray[1]);
+
+    dummyArray = findBefore("\\s+([^\\s]+\\s[^\\s]+\\s+)", "punt for");
+    play.puntPlay.setYdsPunted(dummyArray[0]);
+  }
+
+  private void getKickOffInfo() {
+    playString = removeUnwantedWords();
+
+    String[] dummyArray;
+
+    if (playString.contains("fumble"))
+      processAFumble();
 
     dummyArray = findAfter("\\s+([^\\s]+\\s[^\\s]+\\s+)", "kickoff for");
     play.kickOff.setKickerFirstName(dummyArray[0]);
@@ -228,32 +298,28 @@ public class FBPParser {
     dummyArray = findAfter("\\s+([^\\s]+\\s[^\\s]+\\s+)", "pass intercepted");
     play.passPlay.setPasserFirstName(dummyArray[0]);
     play.passPlay.setPasserLastName(dummyArray[1]);
+    if (playString.contains("fumble"))
+      processAFumble();
 
     if (playString.contains("TD")) {
       dummyArray = findBefore("\\s+([^\\s]+\\s[^\\s]+)", "for a TD");
       play.interception.setDefBackFirstName(dummyArray[0]);
       play.interception.setDefBackLastName(dummyArray[1]);
-
       dummyArray = findBefore("\\s+([^\\s]+)", "return for");
       play.interception.setRtnYds(dummyArray[0]);
-
     } else if (playString.contains("no gain")) {
       dummyArray = findBefore("\\s+([^\\s]+\\s[^\\s]+\\s+)", "pass intercepted");
       play.interception.setDefBackFirstName(dummyArray[0]);
       play.interception.setDefBackLastName(dummyArray[1]);
-
       play.interception.setRtnYds("0");
     } else if (playString.contains("loss")) {
-
       dummyArray = findBefore("\\s+([^\\s]+\\s[^\\s]+\\s+)", "pass intercepted");
       play.interception.setDefBackFirstName(dummyArray[0]);
       play.interception.setDefBackLastName(dummyArray[1]);
-
     } else {
       dummyArray = findBefore("\\s+([^\\s]+\\s[^\\s]+\\s+)", "pass intercepted");
       play.interception.setDefBackFirstName(dummyArray[0]);
       play.interception.setDefBackLastName(dummyArray[1]);
-
       dummyArray = findBefore("\\s+([^\\s]+)", "return for");
       play.interception.setRtnYds(dummyArray[0]);
     }
@@ -296,18 +362,16 @@ public class FBPParser {
 
     if (playString.contains("kickoff"))
       play.setTypeOfPlay("kickOff");
-    else if (playString.contains("run"))
+    else if (playString.contains("run") || playString.contains("sacked"))
       play.setTypeOfPlay("run");
     else if (playString.contains("pass"))
       play.setTypeOfPlay("pass");
     else if (playString.contains("punt"))
       play.setTypeOfPlay("punt");
-    else if (playString.contains("Penalty"))
+    else if (playString.contains("Penalty") || playString.contains("PENALTY"))
       play.setTypeOfPlay("penalty");
     else if (playString.contains("FG"))
       play.setTypeOfPlay("fieldGoal");
-    else if (playString.contains("sacked"))
-      play.setTypeOfPlay("sacked");
     else if (playString.contains("Timeout"))
       play.setTypeOfPlay("timeOut");
 

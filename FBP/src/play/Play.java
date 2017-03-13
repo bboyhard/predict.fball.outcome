@@ -25,12 +25,30 @@ public class Play {
   String gameYear;
   String vistorTeamScore;
   String homeTeamScore;
+  String sackerFirstName;
+  String sackerLastName;
   boolean isTD;
   boolean extraPoint;
   boolean twoPointConversion;
   boolean isPenalty;
   boolean isFirstDown;
   boolean isJunior;
+
+  public String getSackerFirstName() {
+    return sackerFirstName;
+  }
+
+  public void setSackerFirstName(String sackerFirstName) {
+    this.sackerFirstName = sackerFirstName;
+  }
+
+  public String getSackerLastName() {
+    return sackerLastName;
+  }
+
+  public void setSackerLastName(String sackerLastName) {
+    this.sackerLastName = sackerLastName;
+  }
 
   public DownInfo getDownInfo() {
     return downInfo;
@@ -297,6 +315,8 @@ public class Play {
     gameInfoHeader.add("Rusher First Name");
     gameInfoHeader.add("Rusher Last Name");
     gameInfoHeader.add("Yards Rushed");
+    gameInfoHeader.add("Sacker First Name");
+    gameInfoHeader.add("Sacker Last Name");
 
     return gameInfoHeader;
   }
@@ -306,6 +326,9 @@ public class Play {
     gameInfoMap.put("rusherFirstName", runPlay.rusherFirstName);
     gameInfoMap.put("rusherLastName", runPlay.rusherLastName);
     gameInfoMap.put("yardsRush", runPlay.ydsRushed);
+    gameInfoMap.put("sackerFirstName", sackerFirstName);
+    gameInfoMap.put("sackerLastName", sackerLastName);
+    
 
     return gameInfoMap;
   }
@@ -375,6 +398,29 @@ public class Play {
     gameInfoMap.put("kickOffRecFirstName", kickOff.recFirstName);
     gameInfoMap.put("kickOffRecLastName", kickOff.recLastName);
     gameInfoMap.put("kickOffRtnYards", kickOff.rtnYds);
+
+    return gameInfoMap;
+  }
+  
+  public LinkedList<String> puntInfoHeader() {
+    LinkedList<String> gameInfoHeader = new LinkedList<String>();
+    gameInfoHeader.add("Puntter First Name");
+    gameInfoHeader.add("Punter Last Name");
+    gameInfoHeader.add("Punt Yards Kicked");
+    gameInfoHeader.add("Receiver First Name");
+    gameInfoHeader.add("Receiver Last Name");
+    gameInfoHeader.add("Return Yards");
+    return gameInfoHeader;
+  }
+
+  public LinkedHashMap<String, String> puntInfoToMap() {
+    LinkedHashMap<String, String> gameInfoMap = new LinkedHashMap<String, String>();
+    gameInfoMap.put("punterFirstName", puntPlay.punterFirstName);
+    gameInfoMap.put("punterLastName", puntPlay.punterLastName);
+    gameInfoMap.put("puntYardsKicked", puntPlay.ydsPunted);
+    gameInfoMap.put("puntRecFirstName", puntPlay.rtnFirstName);
+    gameInfoMap.put("puntRecLastName", puntPlay.rtnLastName);
+    gameInfoMap.put("puntRtnYards", puntPlay.rtnYds);
 
     return gameInfoMap;
   }

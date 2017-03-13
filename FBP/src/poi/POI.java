@@ -14,7 +14,7 @@ import play.Play;
 
 public class POI {
 
-  public void createFile(String fileName, ArrayList<Play> listOfPlays)
+  public void createFile(String fileName, ArrayList<Play> listOfPlays, String fileLocation)
       throws FileNotFoundException, IOException, IllegalArgumentException, IllegalAccessException {
 
     XSSFWorkbook workbook = new XSSFWorkbook();
@@ -62,6 +62,11 @@ public class POI {
       cell = row.createCell(++columnCount);
       cell.setCellValue(field);
     }
+    
+    for (String field : dummyPlay.puntInfoHeader()) {
+      cell = row.createCell(++columnCount);
+      cell.setCellValue(field);
+    }
 
     rowCount = 0;
     for (Play play : listOfPlays) {
@@ -74,6 +79,7 @@ public class POI {
       playMap.putAll(play.passInfoToMap());
       playMap.putAll(play.intInfoToMap());
       playMap.putAll(play.kickOffInfoToMap());
+      playMap.putAll(play.puntInfoToMap());
 
       columnCount = 0;
 
@@ -86,9 +92,9 @@ public class POI {
       }
 
     }
-    fileName = fileName + ".xlsx";
+    fileLocation = fileLocation + ".xlsx";
 
-    try (FileOutputStream outputStream = new FileOutputStream(fileName)) {
+    try (FileOutputStream outputStream = new FileOutputStream(fileLocation)) {
       workbook.write(outputStream);
     }
 

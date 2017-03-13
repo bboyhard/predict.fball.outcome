@@ -24,25 +24,31 @@ public class FBPmain {
   private static ArrayList<Play> listOfPlays = new ArrayList<Play>();
   private static String title;
 
-  public static void main(String[] args) throws IOException, IllegalArgumentException, IllegalAccessException {
-    long startTime = System.currentTimeMillis();
-
-    getTheData();
-    sendTheData();
-
-    long endTime = System.currentTimeMillis();
-    long totalTime = endTime - startTime;
-    System.out.println("Run Time: " + totalTime / 1000d + "seconds");
+//  public static void main(String[] args) throws IOException, IllegalArgumentException, IllegalAccessException {
+//    long startTime = System.currentTimeMillis();
+//
+//    getTheData();
+//    sendTheData();
+//
+//    long endTime = System.currentTimeMillis();
+//    long totalTime = endTime - startTime;
+//    System.out.println("Run Time: " + totalTime / 1000d + "seconds");
+    
+//    new Panel();  
+//  }
+  
+  public void startTheProcess(String website, String fileLocation) throws IOException, IllegalArgumentException, IllegalAccessException {
+    getTheData(website, fileLocation);
+    sendTheData(fileLocation);
   }
 
-  private static void getTheData() throws IOException {
+  private static void getTheData(String website, String fileLocation) throws IOException {
     // ----ESPN websites----
-    String url = "http://www.espn.com/college-football/playbyplay?gameId=400869187"; //
-    Document doc = Jsoup.connect(url).get();
-    // String urlTen =
-    // "http://www.espn.com/college-football/playbyplay?gameId=400876104";
-    // Document doc = Jsoup.connect(urlTen).get();
-
+//    String url = "http://www.espn.com/college-football/playbyplay?gameId=400869187"; //
+//    Document doc = Jsoup.connect(url).get();
+//     String urlTen ="http://www.espn.com/college-football/playbyplay?gameId=400876104";
+//     Document doc = Jsoup.connect(urlTen).get();
+    Document doc = Jsoup.connect(website).get();
     FBPParser parser = new FBPParser();
 
     // ----Local Development----
@@ -70,6 +76,8 @@ public class FBPmain {
       Elements vistorScore = element.select("span.away");
 
       String hscore = homeScore.text();
+      
+      
       String vscore = vistorScore.text();
 
       String[] homeScoreArray = hscore.split("[^0-9]+");
@@ -102,7 +110,7 @@ public class FBPmain {
 
   }
 
-  private static void sendTheData()
+  private static void sendTheData(String fileLocation)
       throws FileNotFoundException, IOException, IllegalArgumentException, IllegalAccessException {
 
     POI poi = new POI();
@@ -110,7 +118,7 @@ public class FBPmain {
     if (title.isEmpty())
       title = "No Title";
 
-    poi.createFile(title, listOfPlays);
+    poi.createFile(title, listOfPlays, fileLocation);
 
   }
 }
