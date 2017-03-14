@@ -26,12 +26,12 @@ public class FrontEnd extends JFrame {
 
   private String fileLocation;
   private String urlString;
-  
+
   private FBPmain fbMain = new FBPmain();
 
   public FrontEnd() {
     JPanel panel = new JPanel();
-    
+
     fileButton.addActionListener(new SaveL());
     createButton.addActionListener(new SendToParser());
     panel.add(fileButton);
@@ -58,13 +58,13 @@ public class FrontEnd extends JFrame {
       } catch (Exception ex) {
         System.out.println(ex);
       }
-      
+
       try {
         fbMain.startTheProcess(urlString, fileLocation);
       } catch (IllegalArgumentException e) {
         // TODO Auto-generated catch block
         e.printStackTrace();
-       } catch (IOException e) {
+      } catch (IOException e) {
         // TODO Auto-generated catch block
         e.printStackTrace();
       } catch (IllegalAccessException e) {
